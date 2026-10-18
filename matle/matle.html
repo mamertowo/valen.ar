@@ -5,11 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matle</title>
 
+    <link rel="stylesheet" href="matle.css">
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
 </head>
 <body>
     <h1>Matle</h1>
-    <p>Woag</p>
-    <p>Mirá esta ecuación \(\sum_{i=0}^{|s|-1}s[i]\)</p>
+    <p id="consigna-text">
+        En la figura, las rectas \(a\), \(b\) y \(c\) son todas 
+        paralelas entre sí y \(t\) y \(p\) son dos transversales.
+        Calculá el valor de \(y\).
+    </p>
+    <p id="consigna-img">
+        <img src="cosa-000.png">
+    </p>
+    <form id="respuesta-form">
+        <input type="text" name="respuesta" id="respuesta-box">
+        <input type="submit" value="Contestar" id="respuesta-submit">
+    </form>
+    <p id="tip">
+        Para resolver este ejercicio y los próximos, hace falta 
+        aprender los temas vistos en 
+        <a href="https://www.youtube.com/watch?v=kmTpiIvBe0I">este video</a>.
+    </p>
+    <script src="matle.js"></script>
 </body>
 </html>
