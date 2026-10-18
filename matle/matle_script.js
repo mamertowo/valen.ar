@@ -1,3 +1,6 @@
+const params = new URLSearchParams(document.location.search);
+const day = parseInt(params.get("dia"));
+
 const form = document.getElementById('respuesta-form');
 
 form.addEventListener('submit', event => {
