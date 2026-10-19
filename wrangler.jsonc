@@ -1,7 +1,19 @@
 {
     "name": "valen-ar",
     "compatibility_date": "2026-10-12",
+    "main": "worker.js",
+
     "assets": {
-        "directory": "."
-    }
+        "directory": "./public",
+        "binding": "ASSETS",
+        "run_worker_first": ["/api/*"]
+    },
+
+    "d1_databases": [
+        {
+            "binding": "MATLE_DB",
+            "database_name": "matle",
+            "database_id": "8ac49a49-325c-41e2-86c8-3e582ffbccf4"
+        }
+    ]
 }
