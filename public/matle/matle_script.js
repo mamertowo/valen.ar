@@ -11,5 +11,9 @@ form.addEventListener('submit', event => {
         data.respuesta == 2
         ? "Bien!"
         : "Mal!"
-    )
+    );
 })
+
+fetch("/api/woag")
+    .then(response => response.json()
+        .then(data => console.log(data)))
