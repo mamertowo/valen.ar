@@ -32,5 +32,7 @@ export default {
                 });
             }
         }
+
+        return new Response("waddup");
     }
 }
