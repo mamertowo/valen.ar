@@ -19,7 +19,7 @@ h1 {
     font-size: large;
 }
 
-#consigna-img {
+#consigna-image {
     text-align: center;
 }
 
@@ -31,4 +31,8 @@ form {
         padding: 5px;
         font-size: larger;
     }
+}
+
+.hidden {
+    display: none;
 }
