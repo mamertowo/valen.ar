@@ -19,13 +19,13 @@ function fillAndUnhide(element, content) {
 function calculateAndStoreResult(dayNumber, correctAnswer, userAnswer) {
     const results = JSON.parse(localStorage.getItem(LOCAL_RESULTS_KEY));
     const result = userAnswer == correctAnswer ? 'CORRECT' : 'WRONG';
-    results.set(dayNumber, [result, userAnswer]);
+    results[dayNumber] = [result, userAnswer];
     localStorage.setItem(LOCAL_RESULTS_KEY, JSON.stringify(results));
     return result;
 }
 
 function getDayResultAndAnswer(dayNumber) {
-    const entry = JSON.parse(localStorage.getItem(LOCAL_RESULTS_KEY)).get(dayNumber);
+    const entry = JSON.parse(localStorage.getItem(LOCAL_RESULTS_KEY))[dayNumber];
     return entry || ['NO_ANSWER', null];
 }
 
@@ -52,7 +52,7 @@ function setAnswer(dayNumber, answer) {
 }
 
 if (!localStorage.getItem(LOCAL_RESULTS_KEY)) 
-    localStorage.setItem(LOCAL_RESULTS_KEY, JSON.stringify(new Map()));
+    localStorage.setItem(LOCAL_RESULTS_KEY, JSON.stringify({}));
 
 fetch(API_URL + "matle/" + (expectedDayNumber || ""))
     .then(response => response.json()
