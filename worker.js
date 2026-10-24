@@ -7,8 +7,25 @@ export default {
         // if (url.pathname.startsWith("/api/")) {
         //     // etc
         // }
-        return new Response(JSON.stringify({ cosa: "Gaming" }), {
-            headers: { "Content-Type": "application/json" },
-        });
+        const pathname = (new URL(request.url)).pathname.split("/").slice(2);
+        if (pathname.length > 0) {
+            if (pathname[0] = "matle") {
+                let day;
+                if (pathname.length > 1 && parseInt(pathname[1])) {
+                    day = await env.MATLE_DB
+                        .prepare("SELECT * FROM day WHERE day_number = ?")
+                        .bind(parseInt(pathname[1]))
+                        .run();
+                } else {
+                    day = await env.MATLE_DB
+                        .prepare("SELECT MAX(day_number), * FROM day;")
+                        .bind(parseInt(pathname[1]))
+                        .run();
+                }
+                return new Response(JSON.stringify(day), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            }
+        }
     }
 }
