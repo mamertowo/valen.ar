@@ -34,7 +34,7 @@ function showResultIfAnswered(dayNumber) {
     if (result != 'NO_ANSWER') {
         fillAndUnhide(resultElement, `
             Contestaste: ${answer} <br />
-            Eso es <strong>${result == 'CORRECT' ? 'correcto!' : 'incorrecto.'}!</strong>
+            Eso es <strong>${result == 'CORRECT' ? 'correcto!' : 'incorrecto.'}</strong>
         `);
         resultElement.classList.add(result == 'CORRECT' ? 'correct' : 'wrong');
     }
