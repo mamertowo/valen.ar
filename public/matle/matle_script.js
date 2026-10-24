@@ -42,4 +42,6 @@ fetch(API_URL + "matle/" + (expectedDayNumber || ""))
                 `);
 
             setAnswer(day.answer);
+
+            MathJax.typeset();
         }));
