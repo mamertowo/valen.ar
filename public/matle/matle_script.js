@@ -15,7 +15,7 @@ function fillAndUnhide(element, content) {
 }
 
 function setAnswer(answer) {
-    form.addEventListener('submit', event => {
+    answerFormElement.addEventListener('submit', event => {
         event.preventDefault();
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
