@@ -13,8 +13,8 @@ h1 {
     margin: 20px;
 }
 
-#consigna-text, #tip {
-    max-width: 700px;
+#consigna-text, #resultado, #tip {
+    max-width: 800px;
     margin: 20px auto;
     font-size: large;
 }
@@ -33,6 +33,18 @@ form {
     }
 }
 
+#resultado {
+    text-align: center;
+}
+
 .hidden {
     display: none;
+}
+
+.correct {
+    color: green;
+}
+
+.wrong {
+    color: red;
 }
