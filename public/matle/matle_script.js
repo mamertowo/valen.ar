@@ -45,5 +45,5 @@ fetch(API_URL + "matle/" + (expectedDayNumber || ""))
 
             setAnswer(day.answer);
 
-            MathJax.typesetPromise().then(() => console.log("gaming"));
+            MathJax.typesetPromise();
         }));
