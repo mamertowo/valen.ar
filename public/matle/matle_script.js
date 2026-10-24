@@ -23,8 +23,6 @@ function setAnswer(answer) {
     });
 }
 
-console.log(MathJax)
-
 fetch(API_URL + "matle/" + (expectedDayNumber || ""))
     .then(response => response.json()
         .then(day => {
@@ -47,5 +45,5 @@ fetch(API_URL + "matle/" + (expectedDayNumber || ""))
 
             setAnswer(day.answer);
 
-            MathJax.typesetPromise();
+            MathJax.typesetPromise().then(() => console.log("gaming"));
         }));
