@@ -37,6 +37,7 @@ function showResultIfAnswered(dayNumber) {
             Eso es <strong>${result == 'CORRECT' ? 'correcto!' : 'incorrecto.'}</strong>
         `);
         resultElement.classList.add(result == 'CORRECT' ? 'correct' : 'wrong');
+        resultElement.classList.remove(result == 'CORRECT' ? 'wrong' : 'correct');
     }
 }
 
