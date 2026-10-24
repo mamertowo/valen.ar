@@ -23,11 +23,15 @@ function setAnswer(answer) {
     });
 }
 
+console.log(MathJax)
+
 fetch(API_URL + "matle/" + (expectedDayNumber || ""))
     .then(response => response.json()
         .then(day => {
             url.searchParams.set("dia", day.day_number);
             window.history.replaceState(null, "", url);
+
+            MathJax.typesetClear();
             
             questionTextElement.innerHTML = day.question_text;
 
@@ -43,5 +47,5 @@ fetch(API_URL + "matle/" + (expectedDayNumber || ""))
 
             setAnswer(day.answer);
 
-            MathJax.typeset();
+            MathJax.typesetPromise();
         }));
