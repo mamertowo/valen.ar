@@ -10,20 +10,20 @@ export default {
         const pathname = (new URL(request.url)).pathname.split("/").slice(2);
         if (pathname.length > 0) {
             if (pathname[0] = "matle") {
-                fetchDay = async (day) => 
+                const fetchDay = async (day) => 
                     await env.MATLE_DB
                         .prepare("SELECT * FROM day WHERE day_number = ?")
                         .bind(day)
                         .run();
 
-                fetchLastDay = async () =>
+                const fetchLastDay = async () =>
                     await env.MATLE_DB
                         .prepare("SELECT MAX(day_number), * FROM day;")
                         .run();
 
                 let day = (pathname.length > 1 && parseInt(pathname[1]))
-                        ? fetchDay(parseInt(pathname[1]))
-                        : fetchLastDay();
+                        ? await fetchDay(parseInt(pathname[1]))
+                        : await fetchLastDay();
 
                 if (day.results.length = 0) day = fetchLastDay();
 
