@@ -9,23 +9,21 @@ body {
 }
 
 h1 {
-    text-align: center;
     margin: 20px;
 }
 
-#consigna-text, #resultado, #tip {
+#consigna-text, #resultado, #tip, #racha {
     max-width: 800px;
     margin: 20px auto;
     font-size: large;
 }
 
-#consigna-image {
-    text-align: center;
+#racha {
+    color: mediumvioletred;
 }
 
 form {
     margin: 20px 40px;
-    text-align: center;
 
     input {
         padding: 5px;
@@ -33,7 +31,7 @@ form {
     }
 }
 
-#resultado {
+.centered {
     text-align: center;
 }
 

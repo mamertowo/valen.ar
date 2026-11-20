@@ -1,5 +1,6 @@
-const API_URL = "https://valen.ar/api/";
+const API_URL = `${window.location.origin}/api/`;
 const LOCAL_RESULTS_KEY = "myResults";
+const LOCAL_STREAK_KEY = "myCurrentStreak";
 
 const url = new URL(document.location.href);
 const expectedDayNumber = parseInt(url.searchParams.get("dia"));
@@ -8,6 +9,7 @@ const questionTextElement = document.getElementById("consigna-text");
 const questionImageElement = document.getElementById("consigna-image");
 const resultElement = document.getElementById("resultado");
 const tipElement = document.getElementById("tip");
+const streakElement = document.getElementById("racha");
 
 const answerFormElement = document.getElementById('respuesta-form');
 
@@ -16,12 +18,22 @@ function fillAndUnhide(element, content) {
     element.classList.remove("hidden");
 }
 
-function calculateAndStoreResult(dayNumber, correctAnswer, userAnswer) {
+function calculateAndStoreResultAndStreak(dayNumber, correctAnswer, userAnswer) {
     const results = JSON.parse(localStorage.getItem(LOCAL_RESULTS_KEY));
-    const result = userAnswer == correctAnswer ? 'CORRECT' : 'WRONG';
-    results[dayNumber] = [result, userAnswer];
-    localStorage.setItem(LOCAL_RESULTS_KEY, JSON.stringify(results));
-    return result;
+    if (!Object.hasOwn(results, dayNumber) || results[dayNumber][0] !== 'CORRECT') {
+        const result = userAnswer == correctAnswer ? 'CORRECT' : 'WRONG';
+        results[dayNumber] = [result, userAnswer];
+        localStorage.setItem(LOCAL_RESULTS_KEY, JSON.stringify(results));
+
+        if (result === 'CORRECT') {
+            const currentStreak = JSON.parse(localStorage.getItem(LOCAL_STREAK_KEY));
+            currentStreak.length += 1;
+            currentStreak.lastDay = dayNumber;
+            localStorage.setItem(LOCAL_STREAK_KEY, JSON.stringify(currentStreak));
+        }
+
+        return result;
+    }
 }
 
 function getDayResultAndAnswer(dayNumber) {
@@ -34,50 +46,84 @@ function showResultIfAnswered(dayNumber) {
     if (result != 'NO_ANSWER') {
         fillAndUnhide(resultElement, `
             Contestaste: ${answer} <br />
-            Eso es <strong>${result == 'CORRECT' ? 'correcto!' : 'incorrecto.'}</strong>
+            Eso es <strong>${result == 'CORRECT' ? 'correcto</strong>!' : 'incorrecto</strong>.'}
         `);
         resultElement.classList.add(result == 'CORRECT' ? 'correct' : 'wrong');
         resultElement.classList.remove(result == 'CORRECT' ? 'wrong' : 'correct');
     }
 }
 
-function setAnswer(dayNumber, answer) {
+function showStreakIfGoing() {
+    currentStreak = JSON.parse(localStorage.getItem(LOCAL_STREAK_KEY));
+    if (currentStreak.length > 0)
+        fillAndUnhide(streakElement, `
+            Tenés una racha de <strong>${currentStreak.length} día${currentStreak.length > 1 ? "s" : ""}</strong>!
+        `);
+}
+
+function armSubmitButton(dayNumber, answer) {
     answerFormElement.addEventListener('submit', event => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
 
-        calculateAndStoreResult(dayNumber, answer, data.respuesta);
+        calculateAndStoreResultAndStreak(dayNumber, answer, data.respuesta);
         showResultIfAnswered(dayNumber);
+        showStreakIfGoing();
     });
+}
+
+function resetStreak() {
+    const noStreak = {length: 0, lastDay: null};
+    localStorage.setItem(LOCAL_STREAK_KEY, JSON.stringify(noStreak));
+    return noStreak;
+}
+
+function main({
+    day_number: dayNumber,
+    question_text: questionText,
+    answer: correctAnswer,
+    tip,
+    question_image_url: questionImageUrl,
+}) {
+    // Logic
+    url.searchParams.set("dia", dayNumber);
+    window.history.replaceState(null, "", url);
+
+    currentStreak = JSON.parse(localStorage.getItem(LOCAL_STREAK_KEY));
+
+    if (currentStreak.length > 0 && dayNumber > currentStreak.lastDay + 1) 
+        currentStreak = resetStreak();
+
+    armSubmitButton(dayNumber, correctAnswer);
+
+    // Render
+    MathJax.typesetClear();
+    
+    questionTextElement.innerHTML = questionText;
+
+    if (questionImageUrl) 
+        fillAndUnhide(questionImageElement, `
+            <img src="${questionImageUrl}" alt="Imagen relacionada al problema" />
+        `);
+
+    if (tip) 
+        fillAndUnhide(tipElement, `
+            ${tip}
+        `);
+
+    showResultIfAnswered(dayNumber);
+
+    showStreakIfGoing();
+
+    MathJax.typesetPromise();
 }
 
 if (!localStorage.getItem(LOCAL_RESULTS_KEY)) 
     localStorage.setItem(LOCAL_RESULTS_KEY, JSON.stringify({}));
 
+if (!localStorage.getItem(LOCAL_STREAK_KEY)) resetStreak();
+
 fetch(API_URL + "matle/" + (expectedDayNumber || ""))
     .then(response => response.json()
-        .then(day => {
-            url.searchParams.set("dia", day.day_number);
-            window.history.replaceState(null, "", url);
-
-            setAnswer(day.day_number, day.answer);
-
-            MathJax.typesetClear();
-            
-            questionTextElement.innerHTML = day.question_text;
-
-            if (day.question_image_url) 
-                fillAndUnhide(questionImageElement, `
-                    <img src="${day.question_image_url}" alt="Imagen relacionada al problema" />
-                `);
-
-            if (day.tip) 
-                fillAndUnhide(tipElement, `
-                    ${day.tip}
-                `);
-
-            showResultIfAnswered(day.day_number);
-
-            MathJax.typesetPromise();
-        }));
+        .then(day => main(day)));
