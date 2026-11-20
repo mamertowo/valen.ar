@@ -1,4 +1,4 @@
-const API_URL = "https://valen.ar/api/";
+const API_URL = `${window.location.origin}/api/`;
 const LOCAL_RESULTS_KEY = "myResults";
 const LOCAL_STREAK_KEY = "myCurrentStreak";
 
