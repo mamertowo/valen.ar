@@ -53,6 +53,14 @@ function showResultIfAnswered(dayNumber) {
     }
 }
 
+function showStreakIfGoing() {
+    currentStreak = JSON.parse(localStorage.getItem(LOCAL_STREAK_KEY));
+    if (currentStreak.length > 0)
+        fillAndUnhide(streakElement, `
+            Tenés una racha de <strong>${currentStreak.length} día${currentStreak.length > 1 ? "s" : ""}</strong>!
+        `);
+}
+
 function armSubmitButton(dayNumber, answer) {
     answerFormElement.addEventListener('submit', event => {
         event.preventDefault();
@@ -61,6 +69,7 @@ function armSubmitButton(dayNumber, answer) {
 
         calculateAndStoreResultAndStreak(dayNumber, answer, data.respuesta);
         showResultIfAnswered(dayNumber);
+        showStreakIfGoing();
     });
 }
 
@@ -105,10 +114,7 @@ function main({
 
     showResultIfAnswered(dayNumber);
 
-    if (currentStreak.length > 0)
-        fillAndUnhide(streakElement, `
-            Tenés una racha de <strong>${currentStreak.length} día${currentStreak.length > 1 ? "s" : ""}</strong>!
-        `)
+    showStreakIfGoing();
 
     MathJax.typesetPromise();
 }
